@@ -1,7 +1,11 @@
-func buildURL(category string page int) string{
+package scrapper
+
+import "fmt"
+
+func BuildURL(category string, page int) string {
 	if page == 1 {
 		return fmt.Sprintf(
-			"https://books.toscrape.com/catalogue/category/books/category/books/%s/index.html",
+			"https://books.toscrape.com/catalogue/category/books/%s/index.html",
 			category,
 		)
 	}

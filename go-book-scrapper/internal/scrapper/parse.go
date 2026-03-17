@@ -1,4 +1,15 @@
-func parseBooks(resp *http.Response, category string) ([]Book, error) {
+package scrapper
+
+import (
+	"net/http"
+	"strconv"
+	"strings"
+
+	"github.com/PuerkitoBio/goquery"
+	"go-book-scrapper/internal/models"
+)
+
+func ParseBooks(resp *http.Response, category string) ([]models.Book, error) {
 	defer resp.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
@@ -6,7 +17,7 @@ func parseBooks(resp *http.Response, category string) ([]Book, error) {
 		return nil, err
 	}
 
-	books := []Book{}
+	books := []models.Book{}
 
 	doc.Find(".product_pod").Each(func(i int, s *goquery.Selection) {
 		title, _ := s.Find("h3 a").Attr("title")
@@ -14,7 +25,7 @@ func parseBooks(resp *http.Response, category string) ([]Book, error) {
 		rating, _ := s.Find("p").Attr("class")
 		stockText := s.Find(".instock").Text()
 
-		book := Book{
+		book := models.Book{
 			Title:    title,
 			Price:    parsePrice(priceText),
 			Rating:   rating,

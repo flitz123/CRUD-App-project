@@ -1,6 +1,14 @@
-func saveToJSON(filename string, data[]Book) error{
-	fil, err := os.Create(filename)
-	if err !=nil{
+package utils
+
+import (
+	"encoding/json"
+	"go-book-scrapper/internal/models"
+	"os"
+)
+
+func SaveToJSON(filename string, data []models.Book) error {
+	file, err := os.Create(filename)
+	if err != nil {
 		return err
 	}
 	defer file.Close()
@@ -9,9 +17,4 @@ func saveToJSON(filename string, data[]Book) error{
 	encoder.SetIndent("", "  ")
 
 	return encoder.Encode(data)
-}
-
-err := saveToJSON("books.json", allBooks)
-if err != nil{
-	log.Fatal(err)
 }
