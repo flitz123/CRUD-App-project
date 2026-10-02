@@ -9,7 +9,7 @@ ShopScout is a Go-powered product discovery dashboard. It scrapes product listin
 - Product cards with prices, descriptions, ratings, stock status, and links to the source listing.
 - Search, category filters, price/rating sorting, catalog summary stats, and manual product CRUD.
 - JSON-backed catalog storage and a responsive dashboard served directly by the Go application.
-- Render Blueprint configuration and a health-check endpoint.
+- Vercel Go runtime configuration and a health-check endpoint.
 
 ## Run locally
 
@@ -27,11 +27,13 @@ Run the test suite with:
 go test ./...
 ```
 
-## Deploy on Render
+## Deploy on Vercel
 
-Connect this repository to Render and select **Blueprint** deployment. Render reads [`render.yaml`](./render.yaml), builds the Go server, and uses `/api/health` for its health check. The service listens on Render's `PORT` environment variable.
+Import this repository into Vercel with the project root set to the repository root. [`vercel.json`](./vercel.json) selects Vercel's Go framework preset and builds the server from `cmd/server`; the Go server listens on Vercel's `PORT` environment variable. The embedded dashboard and API are served by the same Go process, so no separate frontend build is needed.
 
-Render's default filesystem is ephemeral, so the catalog resets when an instance is replaced. To retain catalog changes across deploys, attach a persistent disk mounted at `/var/data` and add the service environment variable `DATA_FILE=/var/data/products.json` in the Render dashboard.
+Vercel's filesystem is not durable between deployments or runtime instances. On Vercel, the app therefore keeps catalog changes in process memory; data can reset when an instance restarts, and separate instances may have different catalogs. For durable, shared product data, connect a persistent external database and configure an appropriate store before relying on the catalog.
+
+See Vercel's [Go runtime documentation](https://vercel.com/docs/functions/runtimes/go) for current runtime requirements and deployment behavior.
 
 This is a single-user demo and does not include authentication: anyone with the deployed URL can view and modify its catalog. Add access control before using it for a public or production-facing catalog.
 

@@ -17,7 +17,7 @@ import (
 
 func main() {
 	dataFile := os.Getenv("DATA_FILE")
-	if dataFile == "" {
+	if dataFile == "" && os.Getenv("VERCEL") == "" {
 		dataFile = "data/products.json"
 	}
 
