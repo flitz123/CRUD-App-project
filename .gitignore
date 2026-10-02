@@ -1,0 +1,5 @@
+/bin/
+/data/
+/shop-scraper
+/.env
+*.exe
